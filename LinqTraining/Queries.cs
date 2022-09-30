@@ -147,19 +147,18 @@ namespace LinqTraining
         //ex23
         public void GetSalaryInAWeek()
         {
+            context.Database.Log = Console.Write;
             var salary = (from p in context.Person
                           join eph in context.EmployeePayHistories
-                          on p.BusinessEntityID equals eph.BusinessEntityID into p_eph
-                          from subp_eph in p_eph.DefaultIfEmpty()
+                          on p.BusinessEntityID equals eph.BusinessEntityID
                           select new
                           {
                               LastName = p.LastName,
-                              //SalaryPerWeek = (decimal?)(subp_eph.PayFrequency * 40)
+                              SalaryPerWeek = eph.PayFrequency * 40
                           }).ToList();
-
             foreach(var s in salary)
             {
-                Console.WriteLine($"{s.LastName}");
+                Console.WriteLine($"{s.LastName} | {s.SalaryPerWeek}");
             }
 
             Console.ReadKey();
